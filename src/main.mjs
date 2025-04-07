@@ -14,7 +14,7 @@ const app = express()
 
 const PORT = 5000
 
-mongoose.connect('mongodb://localhost:27017/tableData')
+mongoose.connect('mongodb://http://109.73.205.115/:27017/tableData')
     .then(() => console.log('Подключен к базе данных'))
     .catch(err => console.log(err))
     
