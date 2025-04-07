@@ -43,6 +43,7 @@ app.use(passport.session())
 const allowedOrigins = [
     'http://109.73.205.115:33305',
     'http://109.73.205.115:3000',
+    'http://109.73.205.115:3000/',
     'http://localhost:3000'  
 ];
   
