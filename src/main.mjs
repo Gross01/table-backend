@@ -14,7 +14,7 @@ const app = express()
 
 const PORT = 5000
 
-mongoose.connect('mongodb+srv://artem51055:Iou1ibnMZnVb3hxz@table-cluster.dkqgf.mongodb.net/?retryWrites=true&w=majority&appName=Table-cluster')
+mongoose.connect('mongodb://localhost:27017/tableData')
     .then(() => console.log('Подключен к базе данных'))
     .catch(err => console.log(err))
     

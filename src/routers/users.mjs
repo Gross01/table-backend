@@ -10,8 +10,7 @@ router.get('/api/users', async (req, res) => {
         if (!users) return res.status(404).send({message: 'users not found'})
         res.status(200).send(users)
     } catch (err) {
-        // res.status(500).json({ error: err.message });
-        res.sendStatus(200)
+        res.status(500).json({ error: err.message });
     }
 })
 
