@@ -4,9 +4,9 @@ import {getQueryForOrders} from '../utils/middlewares.mjs'
 
 const router = Router()
 
-router.get('/api/orders', getQueryForOrders, async (req, res) => {
+router.get('/orders', getQueryForOrders, async (req, res) => {
     try {
-        console.log(req.sessionID)
+        console.log(12)
         const orders = await Order.find()
         if (!orders) return res.status(404).send({message: 'Заказы не найдены'})
         return res.status(200).send(orders)
@@ -15,7 +15,7 @@ router.get('/api/orders', getQueryForOrders, async (req, res) => {
     }
 })
 
-router.get('/api/orders/:id', async (req, res) => {
+router.get('/orders/:id', async (req, res) => {
     try {
         console.log(req.sessionID)
         const orders = await Order.find({userId: req.params.id})
@@ -34,7 +34,7 @@ router.get('/api/orders/:id', async (req, res) => {
     }
 })
 
-router.post('/api/orders', async (req, res) => {
+router.post('/orders', async (req, res) => {
     if (!req.session.userId) return res.status(401).send({msg: 'Пользователь не авторизован'})
     const newOrder = new Order({userId: req.session.userId , ...req.body})
     try {
@@ -45,7 +45,7 @@ router.post('/api/orders', async (req, res) => {
     }
 })
 
-router.post('/api/orders/array', async (req, res) => {
+router.post('/orders/array', async (req, res) => {
     if (!req.session.userId) {
         return res.status(401).send({ msg: 'Пользователь не авторизован' });
     }
@@ -69,7 +69,7 @@ router.post('/api/orders/array', async (req, res) => {
     }
 });
 
-router.patch('/api/orders/:id', async (req, res) => {
+router.patch('/orders/:id', async (req, res) => {
     try {
       const updatedOrder = await Order.findByIdAndUpdate(
         req.params.id,
@@ -87,7 +87,7 @@ router.patch('/api/orders/:id', async (req, res) => {
     }
 });
 
-router.delete('/api/orders/:id', async (req, res) => {
+router.delete('/orders/:id', async (req, res) => {
     try {
         const deletedOrder = await Order.findByIdAndDelete(req.params.id)
         res.status(200).send(deletedOrder)

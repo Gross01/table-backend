@@ -9,18 +9,25 @@ import passport from 'passport'
 import authRoutres from './routers/auth.mjs'
 import './strategies/local-strategy.js'
 import cors from 'cors'
+import fs from 'fs'
+import https from 'https'
 
 const app = express()
 
-const PORT = 5000
+const PORT = 8080
 
 mongoose.connect('mongodb://109.73.205.115:27017/tableData')
     .then(() => console.log('Подключен к базе данных'))
     .catch(err => console.log(err));
     
-
 app.use(express.json())
 app.use(cookieParser())
+
+app.use(cors({
+    origin: 'https://bsoffice.ru', 
+    credentials: true                     
+}));
+
 app.use(
     session({
         secret: "artem the dev",
@@ -28,9 +35,10 @@ app.use(
         resave: false,
         cookie: {
             httpOnly: true,
-            secure: false,
+            secure: true,
             maxAge: 60000 * 60 * 24 * 7,
-            domain: 'localhost',
+            sameSite: 'none',
+            domain: '.bsoffice.ru',
         },
         store: MongoStore.create({
             client: mongoose.connection.getClient()
@@ -39,26 +47,6 @@ app.use(
 )
 app.use(passport.initialize())
 app.use(passport.session())
-
-const allowedOrigins = [
-    'http://109.73.205.115:33305',
-    'http://109.73.205.115:3000',
-    'http://109.73.205.115:3000/',
-    'http://localhost:3000'  
-];
-  
-const corsOptions = {
-    origin: function(origin, callback) {
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS')); 
-      }
-    }
-};
-  
-app.use(cors(corsOptions));
-
 app.use(usersRouter)
 app.use(ordersRouter)
 app.use(authRoutres)
@@ -67,4 +55,11 @@ app.get('/', (req, res) => {
     res.sendStatus(200)
 })
 
-app.listen(PORT, () => console.log('Сервер запущен'))
+const sslOptions = {
+    key: fs.readFileSync('/etc/letsencrypt/live/api.bsoffice.ru/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/api.bsoffice.ru/fullchain.pem'),
+};
+
+https.createServer(sslOptions, app).listen(PORT, () => {
+    console.log(`HTTPS запущен на порту ${PORT}`)
+})
