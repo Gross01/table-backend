@@ -16,9 +16,19 @@ const app = express()
 
 const PORT = 8080
 
-mongoose.connect('mongodb://109.73.205.115:27017/tableData')
-    .then(() => console.log('Подключен к базе данных'))
-    .catch(err => console.log(err));
+const dbURI = 'mongodb://root:15211415@127.0.0.1:27017/tableData?authSource=admin';
+
+mongoose.connect(dbURI)
+  .then(() => {
+    console.log('MongoDB connected');
+  })
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+  });
+
+// mongoose.connect('mongodb://109.73.205.115:27017/tableData')
+//     .then(() => console.log('Подключен к базе данных'))
+//     .catch(err => console.log(err));
     
 app.use(express.json())
 app.use(cookieParser())

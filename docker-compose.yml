@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:8.0
+    container_name: tableData
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:27017:27017" # Только локальный доступ
+    volumes:
+      - mongo_data:/data/db
+    command: ["--auth"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 15211415
+
+volumes:
+  mongo_data:

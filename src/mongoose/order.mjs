@@ -25,10 +25,6 @@ const OrderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String, 
         required: true, 
     },
-    disabled: {
-        type: mongoose.Schema.Types.Boolean, 
-        required: true, 
-    }
 })
 
 export const Order = mongoose.model('Order', OrderSchema)
